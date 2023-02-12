@@ -4,21 +4,25 @@ import (
 	"context"
 
 	"github.com/go-msvc/auth"
+	"github.com/go-msvc/auth/db"
 	"github.com/go-msvc/errors"
 )
 
-func operAddUser(ctx context.Context, req auth.NewUserRequest) (*auth.User, error) {
-	acc, ok := GetAccount(req.AccountID)
-	if !ok {
-		return nil, errors.Errorf("unknown account_id")
+func operAddAccountUser(ctx context.Context, req auth.NewUserRequest) (*auth.User, error) {
+	acc, err := db.GetAccount(req.AccountID)
+	if err != nil {
+		return nil, errors.Wrapf(err, "cannot get account")
 	}
-	u, err := acc.AddUser(req.Name)
+	u, err := db.AddAccountUser(acc, req.Name)
 	if err != nil {
 		return nil, errors.Wrapf(err, "failed to add user")
 	}
-	return &auth.User{
-		AccountID: acc.id,
-		ID:        u.id,
-		Name:      u.name,
-	}, nil
-} //operAddUser()
+	return u, nil
+} //operAddAccountUser()
+
+func operAddUserRole(ctx context.Context, req auth.AddUserRoleRequest) error {
+	if err := db.AddUserRole(req.UserID, req.RoleID); err != nil {
+		return errors.Wrapf(err, "failed to add user role")
+	}
+	return nil
+}

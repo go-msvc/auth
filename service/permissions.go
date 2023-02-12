@@ -1,7 +1,7 @@
 package main
 
-type permission struct {
-	account *account
-	id      string
-	name    string
-}
+// type permission struct {
+// 	account *account
+// 	id      string
+// 	name    string
+// }

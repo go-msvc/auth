@@ -4,21 +4,18 @@ import (
 	"context"
 
 	"github.com/go-msvc/auth"
+	"github.com/go-msvc/auth/db"
 	"github.com/go-msvc/errors"
 )
 
-func operAddPermission(ctx context.Context, req auth.NewPermissionRequest) (*auth.Permission, error) {
-	acc, ok := GetAccount(req.AccountID)
-	if !ok {
-		return nil, errors.Errorf("unknown account_id")
+func operAddAccountPermission(ctx context.Context, req auth.NewPermissionRequest) (*auth.Permission, error) {
+	acc, err := db.GetAccount(req.AccountID)
+	if err != nil {
+		return nil, errors.Wrapf(err, "cannot get account")
 	}
-	p, err := acc.AddPermission(req.Name)
+	p, err := db.AddAccountPermission(acc, req.Name)
 	if err != nil {
 		return nil, errors.Wrapf(err, "failed to add permission")
 	}
-	return &auth.Permission{
-		AccountID: acc.id,
-		ID:        p.id,
-		Name:      p.name,
-	}, nil
-} //operAddPermission()
+	return p, nil
+} //operAddAccountPermission()

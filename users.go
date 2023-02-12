@@ -28,3 +28,18 @@ func (req NewUserRequest) Validate() error {
 	}
 	return nil
 }
+
+type AddUserRoleRequest struct {
+	UserID string `json:"user_id"`
+	RoleID string `json:"role_id"`
+}
+
+func (req AddUserRoleRequest) Validate() error {
+	if req.UserID == "" {
+		return errors.Errorf("missing user_id")
+	}
+	if req.RoleID == "" {
+		return errors.Errorf("missing role_id")
+	}
+	return nil
+}
