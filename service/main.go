@@ -37,7 +37,7 @@ func main() {
 		// ms.WithOper("updUser", operUpdUser),
 		// ms.WithOper("delUser", operDelUser),
 	)
-	if err := config.AddSource("file", config.File("./config.json")); err != nil {
+	if err := config.AddSource("file", config.File("./conf/config.json")); err != nil {
 		panic(err)
 	}
 	if err := config.Load(); err != nil {
