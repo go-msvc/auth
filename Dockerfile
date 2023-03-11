@@ -6,6 +6,7 @@ COPY db/*.go ./db/
 COPY go.* ./
 COPY ./*.go ./
 WORKDIR /opt/service/
+ENV GOPROXY=direct
 RUN go get .
 RUN CGO_ENABLED=0 GOOS=linux go build -o /opt/service/service
 
